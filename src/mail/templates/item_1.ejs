@@ -1,0 +1,17 @@
+<% items.forEach(item => { %>
+<tr>
+  <td colspan="2" style="padding-bottom: 10px;">
+    <table width="100%" cellspacing="0" cellpadding="0" border="0">
+      <tr>
+        <td style="<%= item.type === 'TITLE' ? "padding: 5px 8px; font-size: 12px; font-weight: bold; color: #333333;": "padding: 3px 8px; font-size: 12px; padding-left: 15px; color: #666666;" %>">
+          <%= item.type === 'TITLE' ? item.title :  item.component?.name || item.component?.label || item.component?.designation  %>
+        </td>
+        <td align="right" style="<%= item.type === 'TITLE' ? "padding: 5px 8px; font-size: 12px; color: #666666;": "padding: 3px 8px; font-size: 12px; color: #666666;" %>">
+          <%= formatCurrency(item.totalHT) %>
+        </td>
+      </tr>
+      <%- include('item_1', { items: item.items, formatCurrency: formatCurrency }) %>
+    </table>
+  </td>
+</tr>
+<% }) %>
