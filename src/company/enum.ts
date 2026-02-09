@@ -1,0 +1,15 @@
+export enum LEGAL_STATUS {
+  SA = 'SA',
+  SARL = 'SARL',
+  EURL = 'EURL',
+  EI = 'EI',
+  SASU = 'SASU',
+  SAS = 'SAS',
+  SNC = 'SNC',
+  SCOP = 'SCOP',
+  SPRL = 'SPRL',
+  SARL_S = 'SARL-S',
+  GMBH = 'GmbH',
+  AG = 'AG',
+  AUTRE = 'Autre',
+}

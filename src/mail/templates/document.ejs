@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= document.type?.name || 'Document' %> - <%= document.code %></title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      font-size: 12px;
+      line-height: 1.4;
+      color: #333;
+    }
+
+    .document {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* En-tête */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 30px;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 20px;
+    }
+
+    .logo-section {
+      flex: 1;
+    }
+
+    .logo-placeholder {
+      width: 120px;
+      height: 50px;
+      border: 2px solid #ddd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 15px;
+      font-weight: bold;
+      font-size: 10px;
+      color: #666;
+    }
+
+    .company-info {
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .document-info {
+      text-align: right;
+      flex: 1;
+    }
+
+    .document-type {
+      font-size: 24px;
+      font-weight: bold;
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+
+    .document-meta {
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    /* Informations client */
+    .client-section {
+      margin-bottom: 30px;
+    }
+
+    .client-title {
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .client-info {
+      font-size: 11px;
+    }
+
+    /* Tableau */
+    .items-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+      font-size: 10px;
+    }
+
+    .items-table th {
+      background-color: #f8f9fa;
+      padding: 8px 6px;
+      text-align: left;
+      border: 1px solid #ddd;
+      font-weight: bold;
+      font-size: 9px;
+    }
+
+    .items-table td {
+      padding: 6px;
+      border: 1px solid #ddd;
+      vertical-align: top;
+    }
+
+    .items-table th:nth-child(1),
+    .items-table td:nth-child(1) {
+      width: 8%;
+    }
+
+    /* Type */
+    .items-table th:nth-child(2),
+    .items-table td:nth-child(2) {
+      width: 40%;
+    }
+
+    /* Désignation */
+    .items-table th:nth-child(3),
+    .items-table td:nth-child(3) {
+      width: 8%;
+    }
+
+    /* Qté */
+    .items-table th:nth-child(4),
+    .items-table td:nth-child(4) {
+      width: 8%;
+    }
+
+    /* Unité */
+    .items-table th:nth-child(5),
+    .items-table td:nth-child(5) {
+      width: 18%;
+    }
+
+    /* P.U HT */
+    .items-table th:nth-child(6),
+    .items-table td:nth-child(6) {
+      width: 18%;
+    }
+
+    /* Total HT */
+
+    .item-title {
+      background-color: #f5f5f5 !important;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+
+    .item-child {
+      padding-left: 20px;
+    }
+
+    .item-child-2 {
+      padding-left: 40px;
+    }
+
+    .text-right {
+      text-align: right;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    /* Section totaux */
+    .totals-section {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 40px;
+    }
+
+    .totals-table {
+      width: 300px;
+      font-size: 11px;
+    }
+
+    .totals-table td {
+      padding: 5px 10px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .total-final {
+      font-weight: bold;
+      font-size: 14px;
+      border-top: 2px solid #2c3e50 !important;
+      background-color: #f8f9fa;
+    }
+
+    /* Pied de page */
+    .footer-section {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 40px;
+      font-size: 10px;
+    }
+
+    .footer-column {
+      flex: 1;
+      margin-right: 20px;
+    }
+
+    .footer-column:last-child {
+      margin-right: 0;
+    }
+
+    .footer-title {
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #2c3e50;
+    }
+
+    .legal-info {
+      margin-top: 30px;
+      text-align: center;
+      font-size: 9px;
+      color: #666;
+      border-top: 1px solid #eee;
+      padding-top: 15px;
+    }
+
+    /* Styles pour l'impression PDF */
+    @media print {
+      body {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .page-break {
+        page-break-before: always;
+      }
+    }
+
+    /* Styles spécifiques aux types d'items */
+    .type-badge {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 8px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .type-title {
+      background-color: #6c757d;
+      color: white;
+    }
+
+    .type-article {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .type-ouvrage {
+      background-color: #007bff;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="document">
+    <!-- En-tête -->
+    <header class="header">
+      <div class="logo-section">
+        <div class="logo-placeholder">
+          LOGO ENTREPRISE
+        </div>
+        <div class="company-info">
+          <strong><%= document.tenant?.name || '---' %></strong><br>
+          <%= document.tenant?.address || '---' %><br>
+          <br>
+          <%= document.tenant?.phone || '---' %><br>
+          <%= document.tenant?.email || '---' %>
+        </div>
+      </div>
+      <div class="document-info">
+        <div class="document-type">
+          <%= document.type?.label || 'Document' %>
+        </div>
+        <div class="document-meta">
+          <strong>N° <%= document.code %></strong><br>
+          <%= formatDate(new Date()) %>
+        </div>
+      </div>
+    </header>
+
+    <!-- Informations client -->
+    <section class="client-section">
+      <div class="client-title">Client:</div>
+      <div class="client-info">
+        <%= document.customer?.code || 'CLI001B' %><br>
+        Réf: <%= document.customer?.code || 'CLI001B' %>
+      </div>
+    </section>
+
+    <!-- Tableau des éléments -->
+    <table class="items-table">
+      <thead>
+        <tr>
+          <!-- <th>Type</th> -->
+          <th>Désignation</th>
+          <th>Qté</th>
+          <th>Unité</th>
+          <th class="text-right">P.U HT (€)</th>
+          <th class="text-right">Total HT (€)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% function renderItem(item, level = 0) { %>
+        <tr class="<%= item.type === 'TITLE' ? 'item-title' : '' %>">
+          <!-- <td class="text-center">
+            <span class="type-badge type-<%= item.type.toLowerCase() %>">
+              <%= getTypeLabel(item.type) %>
+            </span>
+          </td> -->
+          <td style="padding-left: <%= level * 20 %>px;">
+            <%= item.title || item.component?.name || item.component?.label || item.component?.designation %>
+            <% if (item.component?.commercialDescription) { %>
+            <br><small style="color: #666;"><%= item.component.commercialDescription %></small>
+            <% } %>
+          </td>
+          <td class="text-center">
+            <%= item.type !== 'TITLE' && item.quantity ? item.quantity : '-' %>
+          </td>
+          <td class="text-center">
+            <%= item.type !== 'TITLE' ? (item.component?.saleUnit?.code || 'u') : '-' %>
+          </td>
+          <td class="text-right">
+            <% if (item.type !== 'TITLE' && item.component?.salePriceHT) { %>
+            <%= formatCurrency(item.component.salePriceHT) %>
+            <% } else { %>
+            -
+            <% } %>
+          </td>
+          <td class="text-right">
+            <% if (item.type !== 'TITLE' && item.totalHT) { %>
+            <%= formatCurrency(item.totalHT) %>
+            <% } else { %>
+            -
+            <% } %>
+          </td>
+        </tr>
+
+        <!-- Rendu récursif des enfants -->
+        <% if (item.items && item.items.length > 0) { %>
+        <% item.items.forEach(child => { %>
+        <% renderItem(child, level + 1) %>
+        <% }); %>
+        <% } %>
+        <% } %>
+
+        <!-- Rendu de tous les items organisés -->
+        <% document.items.forEach(item => { %>
+        <% renderItem(item) %>
+        <% }); %>
+      </tbody>
+    </table>
+
+    <!-- Section totaux -->
+    <div class="totals-section">
+      <table class="totals-table">
+        <tr>
+          <td>Sous-total HT :</td>
+          <td class="text-right"><%= formatCurrency(document.totalHT) %></td>
+        </tr>
+        <tr>
+          <td>Net HT :</td>
+          <td class="text-right"><%= formatCurrency(document.totalHT) %></td>
+        </tr>
+        <tr>
+          <td>TVA <%= document.tvaRate?.rate || 20 %>% :</td>
+          <td class="text-right"><%= formatCurrency(document.totalTVA) %></td>
+        </tr>
+        <tr class="total-final">
+          <td><strong>Total TTC :</strong></td>
+          <td class="text-right"><strong><%= formatCurrency(document.totalTTC) %></strong></td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Pied de page -->
+    <footer class="footer-section">
+      <div class="footer-column">
+        <div class="footer-title">Conditions de règlement</div>
+        <div>
+          Règlement à 30 jours fin de mois par chèque ou virement bancaire.<br>
+          Escompte de 2%, pour règlement comptant.<br>
+          Pénalités de retard : 3 fois le taux légal.
+        </div>
+      </div>
+      <div class="footer-column">
+        <div class="footer-title">Validité de l'offre</div>
+        <div>
+          <% if (document.validityDate) { %>
+          Cette offre est valable jusqu'au <%= formatDate(new Date(document.validityDate)) %>.
+          <% } else { %>
+          Cette offre est valable jusqu'au [date].
+          <% } %>
+          <br>Les prix sont exprimés en euros HT. TVA 20%.
+        </div>
+      </div>
+    </footer>
+
+    <!-- Informations légales -->
+    <div class="legal-info">
+      SIRET : <%= document.tenant?.siret || '123 456 789 00012' %> •
+      APE : <%= document.tenant?.ape || '4399C' %> •
+      TVA : <%= document.tenant?.tva || 'FR12345678901' %><br>
+      Entreprise Générale du Bâtiment - Capital 50 000 € •
+      RCS Paris B <%= document.tenant?.rcs || '123 456 789' %>
+    </div>
+  </div>
+</body>
+
+</html>
